@@ -1,0 +1,18 @@
+services:
+  db:
+    image: mysql:9.7
+    container_name: base_datos_inventario
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_password
+      MYSQL_DATABASE: inventario_ventas
+    ports:
+      - 3307:3306
+    volumes:
+      - ./db_dump:/docker-entrypoint-initdb.d
+      - ./mysql:/var/lib/mysql
+    secrets:
+      - db_password
+
+secrets:
+  db_password:
+    file: ./db_password.txt
