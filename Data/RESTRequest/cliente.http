@@ -1,0 +1,33 @@
+@host = http://localhost:8080/api
+@uri = {{host}}/cliente
+
+GET {{uri}}
+###
+
+GET {{uri}}/1
+###
+
+GET {{uri}}/filter/0/10?nombre=&cedula=
+###
+
+POST {{uri}}
+Content-Type: application/json
+
+{
+    "cedula": "3-3333-3333",
+    "nombre_completo": "Carlos Rojas",
+    "telefono": "8888-0003",
+    "email": "carlos@correo.com"
+}
+###
+
+PUT {{uri}}/3
+Content-Type: application/json
+
+{
+    "telefono": "8888-1234"
+}
+###
+
+DELETE {{uri}}/3
+###

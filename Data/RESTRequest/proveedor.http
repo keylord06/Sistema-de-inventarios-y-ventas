@@ -1,0 +1,32 @@
+@host = http://localhost:8080/api
+@uri = {{host}}/proveedor
+
+GET {{uri}}
+###
+
+GET {{uri}}/1
+###
+
+GET {{uri}}/filter/0/10?nombre=valle
+###
+
+POST {{uri}}
+Content-Type: application/json
+
+{
+    "nombre": "Distribuidora Central",
+    "telefono": "2200-1003",
+    "email": "info@central.com"
+}
+###
+
+PUT {{uri}}/3
+Content-Type: application/json
+
+{
+    "telefono": "2200-9999"
+}
+###
+
+DELETE {{uri}}/3
+###

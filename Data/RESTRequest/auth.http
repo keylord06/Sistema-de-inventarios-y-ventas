@@ -1,0 +1,10 @@
+@host = http://localhost:8080/api
+
+POST {{host}}/auth/credentials
+Content-Type: application/json
+
+{
+    "username": "admin",
+    "password": "Admin123*"
+}
+###

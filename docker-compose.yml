@@ -1,7 +1,7 @@
 services:
   db:
     image: mysql:9.7
-    container_name: base_datos_inventario
+    container_name: base_datos
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_password
       MYSQL_DATABASE: inventario_ventas
@@ -12,7 +12,41 @@ services:
       - ./mysql:/var/lib/mysql
     secrets:
       - db_password
+  webdatos:
 
+    container_name: web_datos
+
+    volumes:
+      - ./Data/public:/var/www/html/public
+      - ./Data/src:/var/www/html/src
+    build:
+      context: .
+      dockerfile: ./Data/Dockerfile
+    ports:
+      - 8080:80
+    secrets:
+      - db_password
+    depends_on:
+      - db
+
+  #webnegocio:
+  #  container_name: web_negocio
+  #  volumes:
+  #    - ./Business/public:/var/www/html/public
+  #    - ./Business/src:/var/www/html/src
+  #  build:
+  #    context: .
+  #    dockerfile: ./Business/Dockerfile
+  #  ports:
+  #    - 9090:80
+  #  depends_on:
+  #    - webdatos
+  #webpresentacion:
+   # container_name: web_presentacion
+    #build:
+     #dockerfile: Dockerfile
+    #ports:
+    #  - 4200:80
 secrets:
   db_password:
     file: ./db_password.txt

@@ -1,0 +1,27 @@
+@host = http://localhost:8080/api
+@uri = {{host}}/categoria
+
+GET {{uri}}
+###
+
+GET {{uri}}/1
+###
+
+POST {{uri}}
+Content-Type: application/json
+
+{
+    "nombre": "Ferretería"
+}
+###
+
+PUT {{uri}}/5
+Content-Type: application/json
+
+{
+    "nombre": "Ferretería y Hogar"
+}
+###
+
+DELETE {{uri}}/5
+###

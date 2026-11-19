@@ -1,0 +1,50 @@
+@host = http://localhost:8080/api
+@uri = {{host}}/producto
+
+GET {{uri}}
+###
+
+GET {{uri}}/1
+###
+
+GET {{uri}}/filter/0/10?nombre=&codigo=&categoria_id=&activo=1
+###
+
+GET {{uri}}/stock-bajo
+###
+
+POST {{uri}}
+Content-Type: application/json
+
+{
+    "codigo": "7441000000073",
+    "nombre": "Jabón en polvo 1kg",
+    "categoria_id": 4,
+    "proveedor_id": 2,
+    "precio": 2350,
+    "stock": 15,
+    "stock_minimo": 5
+}
+###
+
+PUT {{uri}}/7
+Content-Type: application/json
+
+{
+    "precio": 2400,
+    "stock_minimo": 8
+}
+###
+
+# Entrada de inventario (reposición): suma al stock
+POST {{uri}}/6/entrada
+Content-Type: application/json
+
+{
+    "cantidad": 20
+}
+###
+
+# Borrado lógico (activo = 0)
+DELETE {{uri}}/7
+###
