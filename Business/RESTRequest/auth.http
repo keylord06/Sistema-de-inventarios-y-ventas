@@ -1,0 +1,14 @@
+@host = http://localhost:9090/api
+@uri = {{host}}/auth
+
+POST {{uri}}/login
+Content-Type: application/json
+
+{
+    "username": "admin",
+    "password": "cambiar-por-la-real"
+}
+###
+
+DELETE {{uri}}/loggout/1
+###

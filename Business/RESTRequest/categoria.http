@@ -1,0 +1,33 @@
+@host = http://localhost:9090/api
+@uri = {{host}}/categoria
+@token = pegar-aqui-el-token-del-login
+
+GET {{uri}}
+Authorization: Bearer {{token}}
+###
+
+GET {{uri}}/1
+Authorization: Bearer {{token}}
+###
+
+POST {{uri}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "nombre": "Ferretería"
+}
+###
+
+PUT {{uri}}/5
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "nombre": "Ferretería y Hogar"
+}
+###
+
+DELETE {{uri}}/5
+Authorization: Bearer {{token}}
+###

@@ -1,0 +1,33 @@
+@host = http://localhost:9090/api
+@uri = {{host}}/venta
+@token = pegar-aqui-el-token-del-login
+
+GET {{uri}}
+Authorization: Bearer {{token}}
+###
+
+GET {{uri}}/filter/0/10?estado=Completada
+Authorization: Bearer {{token}}
+###
+
+GET {{uri}}/cliente/1
+Authorization: Bearer {{token}}
+###
+
+POST {{uri}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "cliente_id": 1,
+    "usuario_id": 1,
+    "items": [
+        { "producto_id": 1, "cantidad": 2 },
+        { "producto_id": 2, "cantidad": 1 }
+    ]
+}
+###
+
+PUT {{uri}}/1/anular
+Authorization: Bearer {{token}}
+###

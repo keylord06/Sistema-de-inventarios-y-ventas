@@ -29,18 +29,19 @@ services:
     depends_on:
       - db
 
-  #webnegocio:
-  #  container_name: web_negocio
-  #  volumes:
-  #    - ./Business/public:/var/www/html/public
-  #    - ./Business/src:/var/www/html/src
-  #  build:
-  #    context: .
-  #    dockerfile: ./Business/Dockerfile
-  #  ports:
-  #    - 9090:80
-  #  depends_on:
-  #    - webdatos
+  webnegocio:
+    container_name: web_negocio
+    volumes:
+      - ./Business/public:/var/www/html/public
+      - ./Business/src:/var/www/html/src
+    build:
+      context: .
+      dockerfile: ./Business/Dockerfile
+    ports:
+      - 9090:80
+    depends_on:
+      - webdatos
+
   #webpresentacion:
    # container_name: web_presentacion
     #build:

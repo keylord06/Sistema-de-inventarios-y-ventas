@@ -1,0 +1,35 @@
+@host = http://localhost:9090/api
+@uri = {{host}}/proveedor
+@token = pegar-aqui-el-token-del-login
+
+GET {{uri}}
+Authorization: Bearer {{token}}
+###
+
+GET {{uri}}/filter/0/10?nombre=dist
+Authorization: Bearer {{token}}
+###
+
+POST {{uri}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "nombre": "Distribuidora Caribe",
+    "telefono": "2222-3333",
+    "email": "ventas@caribe.com"
+}
+###
+
+PUT {{uri}}/1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "telefono": "2222-9999"
+}
+###
+
+DELETE {{uri}}/1
+Authorization: Bearer {{token}}
+###
