@@ -29,15 +29,15 @@ final class ProductoValidator{
          'mensaje' => 'El proveedor debe ser un entero positivo',
       ],
       'precio' => [
-         'regla' => v::numericVal()->min(0, true),
+         'regla' => v::numericVal()->greaterThanOrEqual(0),
          'mensaje' => 'El precio es obligatorio y debe ser un número mayor o igual a 0',
       ],
       'stock' => [
-         'regla' => v::intType()->min(0, true),
+         'regla' => v::intType()->greaterThanOrEqual(0),
          'mensaje' => 'El stock debe ser un entero mayor o igual a 0',
       ],
       'stock_minimo' => [
-         'regla' => v::intType()->min(0, true),
+         'regla' => v::intType()->greaterThanOrEqual(0),
          'mensaje' => 'El stock mínimo debe ser un entero mayor o igual a 0',
       ],
    ];

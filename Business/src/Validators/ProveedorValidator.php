@@ -15,7 +15,7 @@ final class ProveedorValidator{
          'mensaje' => 'El nombre es obligatorio y debe tener entre 2 y 150 caracteres',
       ],
       'telefono' => [
-         'regla' => v::stringType()->length(v::max(20)),
+         'regla' => v::stringType()->length(v::between(0, 20)),
          'mensaje' => 'El teléfono debe tener máximo 20 caracteres',
       ],
       'email' => [

@@ -73,10 +73,43 @@ final class Auth extends Tokens
         }
     }
 
-    // NOTA: falta implementar refresh-session. El Auth.php de Datos todavia no
-    // expone un endpoint para leer/verificar el tkRef guardado de un usuario,
-    // asi que no hay con que comparar el token que mande el cliente.
-    // Pendiente: pedirle a Keylord un GET /auth/tkRef/{id} (o similar) en Datos.
+    public function refreshSession(Request $request, Response $response, array $args): Response
+    {
+        $id = $args['id'] ?? null;
+        $data = $request->getParsedBody();
+        $data = is_array($data) ? $data : [];
+        $tkRef = (string) ($data['tkRef'] ?? '');
+
+        if ($id === null || $tkRef === '') {
+            return $this->json($response, ['error' => 'El token de refresco es obligatorio.'], 422);
+        }
+
+        try {
+            $service = $this->container->get(DataService::class);
+            $upstream = $service->post('auth/verify_token/' . $id, json_encode([
+                'tkRef' => $tkRef
+            ], JSON_THROW_ON_ERROR));
+
+            $credentials = json_decode((string) $upstream->getBody(), true);
+
+            if ($upstream->getStatusCode() !== 200 || !is_array($credentials)) {
+                return $this->json($response, [
+                    'error' => 'Token de refresco inválido.'
+                ], 401);
+            }
+
+            $tokens = $this->generateTokens($credentials);
+
+            // guardar el nuevo token de refresco
+            $this->saveRefreshToken((string) $credentials['id'], $tokens['tkRef']);
+
+            return $this->json($response, $tokens, 200);
+        } catch (ConnectException) {
+            return $this->json($response, ['error' => 'El servicio de datos no está disponible.'], 502);
+        } catch (RequestException) {
+            return $this->json($response, ['error' => 'No se pudo consultar el servicio de datos.'], 502);
+        }
+    }
 
     private function json(Response $response, array $payload, int $status): Response
     {

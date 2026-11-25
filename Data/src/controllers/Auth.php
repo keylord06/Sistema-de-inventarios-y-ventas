@@ -43,6 +43,34 @@ final class Auth {
         $user->save();
         return $this->json($response, ['msj' => 'Token refresco modificado'],200);
     }
+
+    // Verifica que el token de refresco recibido coincida con el guardado para el usuario.
+    public function verifyToken(Request $request, Response $response, $args): Response {
+        $data = $request->getParsedBody();
+        $data = is_array($data) ? $data : [];
+        $tkRef = trim((string) ($data['tkRef'] ?? ''));
+
+        $this->container->get('eloquent');
+
+        $user = null;
+        if ($tkRef !== '') {
+            $user = User::query()
+                ->where('id', $args['id'])
+                ->where('tkRef', $tkRef)
+                ->first(['id', 'username', 'rol_id']);
+        }
+
+        if ($user === null) {
+            return $this->json($response, ['error' => 'Token de refresco inválido'], 401);
+        }
+
+        return $this->json($response, [
+            'id' => (int) $user->id,
+            'username' => $user->username,
+            'rol_id' => (int) $user->rol_id,
+        ], 200);
+    }
+
     private function json(Response $response, array $payload, int $status): Response {
         
         $response->getBody()->write(json_encode($payload, JSON_UNESCAPED_UNICODE|JSON_THROW_ON_ERROR));

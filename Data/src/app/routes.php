@@ -15,6 +15,7 @@ $app->group('/api', function (RouteCollectorProxy $api) {
     $api->group('/auth', function (RouteCollectorProxy $endpoint) {
         $endpoint->post('/credentials', Auth::class . ':credentials');
         $endpoint->put('/tkRef/{id:[0-9]+}', Auth::class . ':updateTokenRef');
+        $endpoint->post('/verify_token/{id:[0-9]+}', Auth::class . ':verifyToken');
     });
 
     $api->group('/categoria', function (RouteCollectorProxy $endpoint) {
