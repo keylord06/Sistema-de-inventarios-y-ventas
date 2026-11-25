@@ -35,10 +35,15 @@ final class Auth {
 
     public function updateTokenRef(Request $request, Response $response, $args): Response {
         $data = $request->getParsedBody();
+        $data = is_array($data) ? $data : [];
 
         $this->container->get('eloquent');
 
         $user = User::find($args['id']);
+        if ($user === null) {
+            return $this->json($response, ['error' => 'Usuario no encontrado'], 404);
+        }
+
         $user->tkRef = trim((string) ($data['tkRef'] ?? ''));
         $user->save();
         return $this->json($response, ['msj' => 'Token refresco modificado'],200);

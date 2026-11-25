@@ -18,4 +18,6 @@ require_once "config.php";
 require_once "conexion.php";
 require_once "eloquent.php";
 
+$app->addErrorMiddleware(false, false, false);
+
 $app->run();
