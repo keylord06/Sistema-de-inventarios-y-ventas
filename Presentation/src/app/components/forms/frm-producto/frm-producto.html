@@ -1,0 +1,55 @@
+<h2 mat-dialog-title>{{ data ? 'Editar Producto' : 'Nuevo Producto' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="formProducto" style="display: flex; flex-direction: column; gap: 6px; padding-top: 8px;">
+    <mat-form-field appearance="outline">
+      <mat-label>Código</mat-label>
+      <input matInput formControlName="codigo" placeholder="7441000000011">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="nombre">
+    </mat-form-field>
+
+    <div style="display: flex; gap: 12px;">
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>ID Categoría</mat-label>
+        <input matInput type="number" formControlName="categoria_id">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>ID Proveedor (Opcional)</mat-label>
+        <input matInput type="number" formControlName="proveedor_id">
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Precio</mat-label>
+      <input matInput type="number" formControlName="precio">
+    </mat-form-field>
+
+    <div style="display: flex; gap: 12px;">
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Stock</mat-label>
+        <input matInput type="number" formControlName="stock">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Stock Mínimo</mat-label>
+        <input matInput type="number" formControlName="stock_minimo">
+      </mat-form-field>
+    </div>
+
+    <mat-checkbox formControlName="activo" color="primary">
+      Producto activo
+    </mat-checkbox>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancelar</button>
+  <button mat-flat-button color="primary" (click)="guardar()" [disabled]="formProducto.invalid">
+    Guardar
+  </button>
+</mat-dialog-actions>

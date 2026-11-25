@@ -1,0 +1,27 @@
+<mat-card class="tabla-card" style="max-width: 390px; width: 100%; padding: 28px;">
+  <div style="text-align: center; margin-bottom: 18px;">
+    <mat-icon color="primary" style="font-size: 40px; height: 40px; width: 40px;">storefront</mat-icon>
+    <h2 style="margin: 8px 0 4px;">Iniciar Sesión</h2>
+    <span style="color: #64748b; font-size: 14px;">Sistema de Inventarios y Ventas</span>
+  </div>
+
+  <form [formGroup]="formLogin" (ngSubmit)="iniciarSesion()">
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Usuario</mat-label>
+      <input matInput type="text" formControlName="username" placeholder="admin">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Contraseña</mat-label>
+      <input matInput type="password" formControlName="password">
+    </mat-form-field>
+
+    @if (errorMsg()) {
+      <p style="color: #dc2626; font-size: 13px; margin-top: 0;">{{ errorMsg() }}</p>
+    }
+
+    <button mat-flat-button color="primary" class="w-100" type="submit" [disabled]="formLogin.invalid || cargando()">
+      {{ cargando() ? 'Ingresando...' : 'Ingresar' }}
+    </button>
+  </form>
+</mat-card>
