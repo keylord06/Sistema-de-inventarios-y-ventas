@@ -1,0 +1,13 @@
+<h2 mat-dialog-title>{{ data ? 'Editar Categoría' : 'Nueva Categoría' }}</h2>
+<mat-dialog-content>
+  <form [formGroup]="formCategoria" style="padding-top: 8px;">
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Nombre de Categoría</mat-label>
+      <input matInput formControlName="nombre">
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancelar</button>
+  <button mat-flat-button color="primary" (click)="guardar()" [disabled]="formCategoria.invalid">Guardar</button>
+</mat-dialog-actions>

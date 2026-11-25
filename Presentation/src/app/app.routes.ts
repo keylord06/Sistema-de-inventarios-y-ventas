@@ -2,6 +2,11 @@ import { Routes } from '@angular/router';
 import { Login } from './components/login/login';
 import { Home } from './components/home/home';
 import { ProductoComponent } from './components/producto-component/producto-component';
+import { CategoriaComponent } from './components/categoria-component/categoria-component';
+import { ProveedorComponent } from './components/proveedor-component/proveedor-component';
+import { ClienteComponent } from './components/cliente-component/cliente-component';
+import { VentaComponent } from './components/venta-component/venta-component';
+import { ReportesComponent } from './components/reportes-component/reportes-component';
 import { Error403Component } from './components/error403-component/error403-component';
 import { Error404Component } from './components/error404-component/error404-component';
 import { authGuard } from './shared/helpers/guards/auth-guard';
@@ -11,6 +16,11 @@ export const routes: Routes = [
   { path: 'login', component: Login },
   { path: 'home', component: Home, canActivate: [authGuard] },
   { path: 'productos', component: ProductoComponent, canActivate: [authGuard] },
+  { path: 'categorias', component: CategoriaComponent, canActivate: [authGuard] },
+  { path: 'proveedores', component: ProveedorComponent, canActivate: [authGuard] },
+  { path: 'clientes', component: ClienteComponent, canActivate: [authGuard] },
+  { path: 'ventas', component: VentaComponent, canActivate: [authGuard] },
+  { path: 'reportes', component: ReportesComponent, canActivate: [authGuard] },
   { path: 'error403', component: Error403Component },
   { path: '**', component: Error404Component }
 ];

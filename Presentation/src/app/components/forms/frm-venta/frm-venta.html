@@ -1,0 +1,67 @@
+<h2 mat-dialog-title>Registrar Nueva Venta</h2>
+<mat-dialog-content>
+  <div style="display: flex; flex-direction: column; gap: 10px; padding-top: 8px;">
+    <mat-form-field appearance="outline">
+      <mat-label>Cliente (Opcional)</mat-label>
+      <mat-select [(ngModel)]="clienteSeleccionado">
+        <mat-option [value]="null">Cliente General</mat-option>
+        @for (c of clientes(); track c.id) {
+          <mat-option [value]="c.id">{{ c.nombre_completo }} ({{ c.cedula }})</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <div style="display: flex; gap: 8px; align-items: center;">
+      <mat-form-field appearance="outline" style="flex: 2;">
+        <mat-label>Producto</mat-label>
+        <mat-select [(ngModel)]="productoSeleccionadoId">
+          @for (p of productos(); track p.id) {
+            <mat-option [value]="p.id">{{ p.nombre }} - ₡{{ p.precio }} (Stock: {{ p.stock }})</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" style="flex: 1;">
+        <mat-label>Cant.</mat-label>
+        <input matInput type="number" min="1" [(ngModel)]="cantidad">
+      </mat-form-field>
+
+      <button mat-flat-button color="accent" type="button" (click)="agregarLinea()" style="margin-bottom: 20px;">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+
+    <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+      <thead>
+        <tr style="border-bottom: 1px solid #cbd5e1; text-align: left;">
+          <th style="padding: 6px;">Producto</th>
+          <th style="padding: 6px;">Cant.</th>
+          <th style="padding: 6px;">Subtotal</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (d of detalles(); track $index) {
+          <tr style="border-bottom: 1px solid #e2e8f0;">
+            <td style="padding: 6px;">{{ d.producto_nombre }}</td>
+            <td style="padding: 6px;">{{ d.cantidad }}</td>
+            <td style="padding: 6px;">₡{{ d.subtotal }}</td>
+            <td>
+              <button mat-icon-button color="warn" (click)="quitarLinea($index)">
+                <mat-icon>close</mat-icon>
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    <h3 style="text-align: right; margin: 12px 0 0;">Total: ₡{{ totalVenta() }}</h3>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancelar</button>
+  <button mat-flat-button color="primary" (click)="guardarVenta()" [disabled]="detalles().length === 0">
+    Finalizar Venta
+  </button>
+</mat-dialog-actions>

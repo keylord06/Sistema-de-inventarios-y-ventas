@@ -1,0 +1,71 @@
+<div class="contenedor-pagina">
+  <div class="cabecera-modulo">
+    <h2>Reportes e Indicadores</h2>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(460px, 1fr)); gap: 18px;">
+    <!-- Reporte 1 -->
+    <mat-card class="tabla-card" style="padding: 18px;">
+      <div class="cabecera-modulo">
+        <h3 style="margin: 0;">1. Productos con Stock Bajo</h3>
+        <button mat-stroked-button color="primary" (click)="exportarCSV('reporte_stock_bajo', reporteStockBajo())">
+          <mat-icon>download</mat-icon> CSV
+        </button>
+      </div>
+      @for (p of reporteStockBajo(); track p.id) {
+        <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #f1f5f9;">
+          <span>{{ p.nombre }} ({{ p.codigo }})</span>
+          <strong style="color: #dc2626;">Stock: {{ p.stock }} / Mín: {{ p.stock_minimo }}</strong>
+        </div>
+      } @empty {
+        <p style="color: #64748b;">No hay productos con stock crítico.</p>
+      }
+    </mat-card>
+
+    <!-- Reporte 2 -->
+    <mat-card class="tabla-card" style="padding: 18px;">
+      <div class="cabecera-modulo">
+        <h3 style="margin: 0;">2. Ventas por Estado</h3>
+        <button mat-stroked-button color="primary" (click)="exportarCSV('reporte_ventas', ventas())">
+          <mat-icon>download</mat-icon> CSV
+        </button>
+      </div>
+      <p>Completadas: <strong>{{ reporteVentasEstado().completadasCount }}</strong> (₡{{ reporteVentasEstado().completadasTotal }})</p>
+      <div style="background: #dcfce7; height: 14px; border-radius: 6px; margin-bottom: 12px;"></div>
+      <p>Anuladas: <strong>{{ reporteVentasEstado().anuladasCount }}</strong> (₡{{ reporteVentasEstado().anuladasTotal }})</p>
+      <div style="background: #fee2e2; height: 14px; border-radius: 6px;"></div>
+    </mat-card>
+
+    <!-- Reporte 3 -->
+    <mat-card class="tabla-card" style="padding: 18px;">
+      <div class="cabecera-modulo">
+        <h3 style="margin: 0;">3. Inventario por Categoría</h3>
+        <button mat-stroked-button color="primary" (click)="exportarCSV('reporte_categorias', reportePorCategoria())">
+          <mat-icon>download</mat-icon> CSV
+        </button>
+      </div>
+      @for (item of reportePorCategoria(); track item.categoria) {
+        <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #f1f5f9;">
+          <span>{{ item.categoria }} ({{ item.cantidadProductos }} prod.)</span>
+          <strong>₡{{ item.valorTotal }}</strong>
+        </div>
+      }
+    </mat-card>
+
+    <!-- Reporte 4 -->
+    <mat-card class="tabla-card" style="padding: 18px;">
+      <div class="cabecera-modulo">
+        <h3 style="margin: 0;">4. Ventas por Cliente</h3>
+        <button mat-stroked-button color="primary" (click)="exportarCSV('reporte_clientes', reportePorCliente())">
+          <mat-icon>download</mat-icon> CSV
+        </button>
+      </div>
+      @for (c of reportePorCliente(); track c.cedula) {
+        <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #f1f5f9;">
+          <span>{{ c.cliente }} ({{ c.cantidadVentas }} compras)</span>
+          <strong>₡{{ c.totalComprado }}</strong>
+        </div>
+      }
+    </mat-card>
+  </div>
+</div>

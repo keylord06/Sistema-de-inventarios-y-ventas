@@ -1,11 +1,33 @@
 <div class="contenedor-pagina">
-  <mat-card class="tabla-card" style="padding: 24px;">
-    <h2 style="margin-top: 0;">Bienvenido, {{ usuario?.nombre || 'Usuario' }}</h2>
-    <p style="color: #64748b;">Panel principal del Sistema de Inventarios y Ventas.</p>
-    <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 16px;">
-      <button mat-flat-button color="primary" routerLink="/productos">
-        <mat-icon>inventory_2</mat-icon> Ir a Productos
-      </button>
+  <div class="cabecera-modulo">
+    <div>
+      <h2>Panel Principal</h2>
+      <p style="color: #64748b; margin: 4px 0 0;">Bienvenido, {{ usuario?.username || 'Usuario' }}</p>
     </div>
-  </mat-card>
+    <button mat-flat-button color="primary" routerLink="/ventas">
+      <mat-icon>point_of_sale</mat-icon> Nueva Venta
+    </button>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
+    <mat-card class="tabla-card" style="padding: 20px;">
+      <span style="color: #64748b; font-size: 13px;">Productos Registrados</span>
+      <h2 style="margin: 8px 0 0; font-size: 28px;">{{ productos().length }}</h2>
+    </mat-card>
+
+    <mat-card class="tabla-card" style="padding: 20px;">
+      <span style="color: #64748b; font-size: 13px;">Alertas Stock Bajo</span>
+      <h2 style="margin: 8px 0 0; font-size: 28px; color: #dc2626;">{{ productosStockBajo() }}</h2>
+    </mat-card>
+
+    <mat-card class="tabla-card" style="padding: 20px;">
+      <span style="color: #64748b; font-size: 13px;">Clientes Activos</span>
+      <h2 style="margin: 8px 0 0; font-size: 28px;">{{ clientes().length }}</h2>
+    </mat-card>
+
+    <mat-card class="tabla-card" style="padding: 20px;">
+      <span style="color: #64748b; font-size: 13px;">Ingresos Totales</span>
+      <h2 style="margin: 8px 0 0; font-size: 28px; color: #16a34a;">₡{{ totalIngresos() }}</h2>
+    </mat-card>
+  </div>
 </div>
