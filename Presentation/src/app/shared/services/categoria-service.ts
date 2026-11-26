@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { CategoriaModel } from '../models/categoria-model';
 
@@ -9,10 +9,13 @@ import { CategoriaModel } from '../models/categoria-model';
 })
 export class CategoriaService {
   private http = inject(HttpClient);
-  private url = `${environment.apiUrl}/categorias`;
+  private url = `${environment.apiUrl}/categoria`;
 
+  // Negocio devuelve { data: [...] }, el componente solo necesita el arreglo.
   listar(): Observable<CategoriaModel[]> {
-    return this.http.get<CategoriaModel[]>(this.url);
+    return this.http
+      .get<{ data: CategoriaModel[] }>(this.url)
+      .pipe(map((respuesta) => respuesta.data));
   }
 
   crear(categoria: CategoriaModel): Observable<any> {

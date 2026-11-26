@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { UserModel } from '../models/user-model';
 
 @Injectable({
   providedIn: 'root'
@@ -23,11 +24,11 @@ export class TokenService {
     return localStorage.getItem(this.REFRESH_KEY);
   }
 
-  guardarUsuario(usuario: any): void {
+  guardarUsuario(usuario: UserModel): void {
     localStorage.setItem(this.USER_KEY, JSON.stringify(usuario));
   }
 
-  obtenerUsuario(): any {
+  obtenerUsuario(): UserModel | null {
     const data = localStorage.getItem(this.USER_KEY);
     return data ? JSON.parse(data) : null;
   }
@@ -36,5 +37,29 @@ export class TokenService {
     localStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem(this.REFRESH_KEY);
     localStorage.removeItem(this.USER_KEY);
+  }
+
+  // El token ya viene firmado por Negocio; aquí solo leemos su contenido
+  // (id, username, rol_id) para no tener que pedirlo aparte al backend.
+  decodificarToken(token: string): UserModel | null {
+    try {
+      const payload = token.split('.')[1];
+      const json = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
+      const datos = JSON.parse(json);
+      return {
+        id: Number(datos.sub),
+        username: datos.username,
+        rol_id: Number(datos.rol_id)
+      };
+    } catch {
+      return null;
+    }
+  }
+
+  guardarUsuarioDesdeToken(token: string): void {
+    const usuario = this.decodificarToken(token);
+    if (usuario) {
+      this.guardarUsuario(usuario);
+    }
   }
 }

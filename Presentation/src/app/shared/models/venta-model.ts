@@ -17,3 +17,10 @@ export interface VentaModel {
   estado?: 'Completada' | 'Anulada';
   detalles?: DetalleVentaModel[];
 }
+
+// Lo que realmente espera Negocio al crear una venta: el usuario_id lo toma
+// del JWT y el precio/total los calcula el servidor, nunca el navegador.
+export interface VentaCrearPayload {
+  cliente_id: number | null;
+  items: { producto_id: number; cantidad: number }[];
+}

@@ -12,7 +12,6 @@ import { DetalleVentaModel } from '../../../shared/models/venta-model';
 import { ClienteService } from '../../../shared/services/cliente-service';
 import { ProductoService } from '../../../shared/services/producto-service';
 import { VentaService } from '../../../shared/services/venta-service';
-import { TokenService } from '../../../shared/services/token.service';
 
 @Component({
   selector: 'app-frm-venta',
@@ -33,7 +32,6 @@ export class FrmVenta implements OnInit {
   private clienteService = inject(ClienteService);
   private productoService = inject(ProductoService);
   private ventaService = inject(VentaService);
-  private tokenService = inject(TokenService);
   private dialogRef = inject(MatDialogRef<FrmVenta>);
 
   clientes = signal<ClienteModel[]>([]);
@@ -77,14 +75,15 @@ export class FrmVenta implements OnInit {
 
   guardarVenta(): void {
     if (this.detalles().length === 0) return;
-    const usuario = this.tokenService.obtenerUsuario();
 
+    // El precio y el total los calcula Negocio con los precios reales de la
+    // base de datos; el navegador solo manda qué producto y cuánta cantidad.
     const payload = {
       cliente_id: this.clienteSeleccionado,
-      usuario_id: usuario?.id || 1,
-      total: this.totalVenta(),
-      estado: 'Completada' as const,
-      detalles: this.detalles()
+      items: this.detalles().map((d) => ({
+        producto_id: d.producto_id,
+        cantidad: d.cantidad
+      }))
     };
 
     this.ventaService.crear(payload).subscribe({

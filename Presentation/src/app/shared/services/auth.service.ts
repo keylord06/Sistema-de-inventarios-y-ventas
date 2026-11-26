@@ -21,10 +21,9 @@ export class AuthService {
     return this.http.post<LoginResponse>(`${this.apiUrl}/auth/login`, credenciales).pipe(
       tap((resp) => {
         if (resp.token) {
-          this.tokenService.guardarTokens(resp.token, resp.refreshToken);
-          if (resp.usuario) {
-            this.tokenService.guardarUsuario(resp.usuario);
-          }
+          this.tokenService.guardarTokens(resp.token, resp.tkRef);
+          // Negocio no manda el usuario aparte: el mismo token ya trae id/username/rol_id.
+          this.tokenService.guardarUsuarioDesdeToken(resp.token);
           this.estaAutenticado.set(true);
         }
       })
@@ -32,17 +31,25 @@ export class AuthService {
   }
 
   refrescarToken(): Observable<LoginResponse> {
-    const refreshToken = this.tokenService.obtenerRefreshToken();
-    return this.http.post<LoginResponse>(`${this.apiUrl}/auth/refresh`, { refreshToken }).pipe(
-      tap((resp) => {
-        if (resp.token) {
-          this.tokenService.guardarTokens(resp.token, resp.refreshToken);
-        }
-      })
-    );
+    const usuario = this.tokenService.obtenerUsuario();
+    const tkRef = this.tokenService.obtenerRefreshToken();
+    return this.http
+      .post<LoginResponse>(`${this.apiUrl}/auth/refresh-session/${usuario?.id}`, { tkRef })
+      .pipe(
+        tap((resp) => {
+          if (resp.token) {
+            this.tokenService.guardarTokens(resp.token, resp.tkRef);
+            this.tokenService.guardarUsuarioDesdeToken(resp.token);
+          }
+        })
+      );
   }
 
   logout(): void {
+    const usuario = this.tokenService.obtenerUsuario();
+    if (usuario?.id) {
+      this.http.delete(`${this.apiUrl}/auth/loggout/${usuario.id}`).subscribe();
+    }
     this.tokenService.limpiarTodo();
     this.estaAutenticado.set(false);
     this.router.navigate(['/login']);

@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { ProductoModel } from '../models/product-model';
 
@@ -9,10 +9,13 @@ import { ProductoModel } from '../models/product-model';
 })
 export class ProductoService {
   private http = inject(HttpClient);
-  private url = `${environment.apiUrl}/productos`;
+  private url = `${environment.apiUrl}/producto`;
 
+  // Negocio devuelve { data: [...] }, el componente solo necesita el arreglo.
   listar(): Observable<ProductoModel[]> {
-    return this.http.get<ProductoModel[]>(this.url);
+    return this.http
+      .get<{ data: ProductoModel[] }>(this.url)
+      .pipe(map((respuesta) => respuesta.data));
   }
 
   crear(producto: ProductoModel): Observable<any> {
