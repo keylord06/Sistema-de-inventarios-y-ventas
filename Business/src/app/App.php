@@ -27,6 +27,7 @@ AppFactory::setContainer($container);
 $app = AppFactory::create();
 $app->addBodyParsingMiddleware();
 
+require __DIR__ . '/roles.php';
 require __DIR__ . '/routes.php';
 require __DIR__ . '/config.php';
 

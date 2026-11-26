@@ -10,21 +10,23 @@ $app->group('/api', function (RouteCollectorProxy $api) {
     $endpoint->post('/refresh-session/{id}', Auth::class . ':refreshSession');
   });
 
+  // Solo Admin (rol_id 1) puede crear/editar/borrar el catálogo (categoria, proveedor, producto).
   $api->group('/categoria', function (RouteCollectorProxy $endpoint) {
     $endpoint->get('[/{id}]', Categoria::class . ':read');
-    $endpoint->post('', Categoria::class . ':create');
-    $endpoint->put('/{id}', Categoria::class . ':update');
-    $endpoint->delete('/{id}', Categoria::class . ':delete');
+    $endpoint->post('', Categoria::class . ':create')->add(soloRoles([1]));
+    $endpoint->put('/{id}', Categoria::class . ':update')->add(soloRoles([1]));
+    $endpoint->delete('/{id}', Categoria::class . ':delete')->add(soloRoles([1]));
   });
 
   $api->group('/proveedor', function (RouteCollectorProxy $endpoint) {
     $endpoint->get('/filter/{offset}/{limit}', Proveedor::class . ':filter');
     $endpoint->get('[/{id}]', Proveedor::class . ':read');
-    $endpoint->post('', Proveedor::class . ':create');
-    $endpoint->put('/{id}', Proveedor::class . ':update');
-    $endpoint->delete('/{id}', Proveedor::class . ':delete');
+    $endpoint->post('', Proveedor::class . ':create')->add(soloRoles([1]));
+    $endpoint->put('/{id}', Proveedor::class . ':update')->add(soloRoles([1]));
+    $endpoint->delete('/{id}', Proveedor::class . ':delete')->add(soloRoles([1]));
   });
 
+  // Cliente no es catálogo: cualquier rol autenticado puede gestionarlo (lo necesita para vender).
   $api->group('/cliente', function (RouteCollectorProxy $endpoint) {
     $endpoint->get('/filter/{offset}/{limit}', Cliente::class . ':filter');
     $endpoint->get('[/{id}]', Cliente::class . ':read');
@@ -37,17 +39,18 @@ $app->group('/api', function (RouteCollectorProxy $api) {
     $endpoint->get('/filter/{offset}/{limit}', Producto::class . ':filter');
     $endpoint->get('/stock-bajo', Producto::class . ':stockBajo');
     $endpoint->get('[/{id}]', Producto::class . ':read');
-    $endpoint->post('', Producto::class . ':create');
-    $endpoint->post('/{id}/entrada', Producto::class . ':entrada');
-    $endpoint->put('/{id}', Producto::class . ':update');
-    $endpoint->delete('/{id}', Producto::class . ':delete');
+    $endpoint->post('', Producto::class . ':create')->add(soloRoles([1]));
+    $endpoint->post('/{id}/entrada', Producto::class . ':entrada')->add(soloRoles([1]));
+    $endpoint->put('/{id}', Producto::class . ':update')->add(soloRoles([1]));
+    $endpoint->delete('/{id}', Producto::class . ':delete')->add(soloRoles([1]));
   });
 
+  // Venta: cualquier rol autenticado puede vender; solo Admin puede anular una venta ya hecha.
   $api->group('/venta', function (RouteCollectorProxy $endpoint) {
     $endpoint->get('/filter/{offset}/{limit}', Venta::class . ':filter');
     $endpoint->get('/cliente/{id}', Venta::class . ':readCliente');
     $endpoint->get('[/{id}]', Venta::class . ':read');
     $endpoint->post('', Venta::class . ':create');
-    $endpoint->put('/{id}/anular', Venta::class . ':anular');
+    $endpoint->put('/{id}/anular', Venta::class . ':anular')->add(soloRoles([1]));
   });
 });

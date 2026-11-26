@@ -22,8 +22,8 @@ services:
     build:
       context: .
       dockerfile: ./Data/Dockerfile
-    ports:
-      - 8080:80
+    # Sin "ports": Datos solo se alcanza por la red interna de Docker
+    # (http://webdatos/api), nunca directo desde fuera del contenedor.
     secrets:
       - db_password
     depends_on:

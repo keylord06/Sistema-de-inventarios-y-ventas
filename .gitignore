@@ -1,2 +1,9 @@
 mysql/
 Data/vendor/
+Business/vendor/
+
+# Secretos (usar los .env.example como plantilla)
+Business/.env
+Data/.env
+db_password.txt
+.env.prod

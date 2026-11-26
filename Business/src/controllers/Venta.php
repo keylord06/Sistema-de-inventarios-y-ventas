@@ -81,6 +81,10 @@ class Venta
                 return $this->json($response, ['errors' => ['body' => 'Debe enviar un objeto JSON válido']], 422);
             }
 
+            // El usuario_id se toma del JWT, nunca de lo que mande el cliente.
+            $token = $request->getAttribute('token');
+            $data['usuario_id'] = isset($token['sub']) ? (int) $token['sub'] : null;
+
             $errors = (new VentaValidator())->validate($data);
             if ($errors !== []) {
                 return $this->json($response, ['errors' => $errors], 422);

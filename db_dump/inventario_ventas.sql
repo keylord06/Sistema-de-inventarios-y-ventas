@@ -140,9 +140,10 @@ DELIMITER ;
 
 INSERT INTO roles (nombre) VALUES ('Admin'), ('Vendedor'), ('Bodeguero');
 
--- Contraseña: Admin123*
+-- Contraseña admin: Admin123*  |  Contraseña vendedor: Vendedor123*
 INSERT INTO usuarios (username, password, rol_id) VALUES
-    ('admin', '$2a$10$yBt6ZHE2CtDyshp1qHlTzevE1VJSmvfWDjj7qvA/tIQ0BrztLaHMW', 1);
+    ('admin', '$2a$10$yBt6ZHE2CtDyshp1qHlTzevE1VJSmvfWDjj7qvA/tIQ0BrztLaHMW', 1),
+    ('vendedor', '$2y$12$ZJbfJqvOOJwaL5ENvjO/6.VK8qKAC7PGrmgW8oJmedviNzUk05Hn2', 2);
 
 INSERT INTO categorias (nombre) VALUES
     ('Electrónica'),
