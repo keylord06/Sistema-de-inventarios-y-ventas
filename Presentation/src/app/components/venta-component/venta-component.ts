@@ -8,6 +8,7 @@ import { VentaModel } from '../../shared/models/venta-model';
 import { VentaService } from '../../shared/services/venta-service';
 import { FrmVenta } from '../forms/frm-venta/frm-venta';
 import { DialogoGeneral } from '../forms/dialogo-general/dialogo-general';
+import { mensajeDeError } from '../../shared/helpers/error-message';
 
 @Component({
   selector: 'app-venta-component',
@@ -45,7 +46,10 @@ export class VentaComponent implements OnInit {
     });
     ref.afterClosed().subscribe((ok) => {
       if (ok && venta.id) {
-        this.ventaService.anular(venta.id).subscribe({ next: () => this.cargarVentas() });
+        this.ventaService.anular(venta.id).subscribe({
+          next: () => this.cargarVentas(),
+          error: (err) => alert(mensajeDeError(err))
+        });
       }
     });
   }

@@ -8,6 +8,7 @@ import { CategoriaModel } from '../../shared/models/categoria-model';
 import { CategoriaService } from '../../shared/services/categoria-service';
 import { FrmCategoria } from '../forms/frm-categoria/frm-categoria';
 import { DialogoGeneral } from '../forms/dialogo-general/dialogo-general';
+import { mensajeDeError } from '../../shared/helpers/error-message';
 
 @Component({
   selector: 'app-categoria-component',
@@ -45,7 +46,10 @@ export class CategoriaComponent implements OnInit {
     });
     ref.afterClosed().subscribe((ok) => {
       if (ok && categoria.id) {
-        this.categoriaService.eliminar(categoria.id).subscribe({ next: () => this.cargarCategorias() });
+        this.categoriaService.eliminar(categoria.id).subscribe({
+          next: () => this.cargarCategorias(),
+          error: (err) => alert(mensajeDeError(err))
+        });
       }
     });
   }

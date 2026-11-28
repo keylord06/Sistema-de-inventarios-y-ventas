@@ -12,6 +12,7 @@ import { DetalleVentaModel } from '../../../shared/models/venta-model';
 import { ClienteService } from '../../../shared/services/cliente-service';
 import { ProductoService } from '../../../shared/services/producto-service';
 import { VentaService } from '../../../shared/services/venta-service';
+import { mensajeDeError } from '../../../shared/helpers/error-message';
 
 @Component({
   selector: 'app-frm-venta',
@@ -46,6 +47,8 @@ export class FrmVenta implements OnInit {
     this.detalles().reduce((acc, item) => acc + item.subtotal, 0)
   );
 
+  errorMsg = signal<string>('');
+
   ngOnInit(): void {
     this.clienteService.listar().subscribe({ next: (c) => this.clientes.set(c) });
     this.productoService.listar().subscribe({ next: (p) => this.productos.set(p) });
@@ -75,6 +78,7 @@ export class FrmVenta implements OnInit {
 
   guardarVenta(): void {
     if (this.detalles().length === 0) return;
+    this.errorMsg.set('');
 
     // El precio y el total los calcula Negocio con los precios reales de la
     // base de datos; el navegador solo manda qué producto y cuánta cantidad.
@@ -87,7 +91,8 @@ export class FrmVenta implements OnInit {
     };
 
     this.ventaService.crear(payload).subscribe({
-      next: () => this.dialogRef.close(true)
+      next: () => this.dialogRef.close(true),
+      error: (err) => this.errorMsg.set(mensajeDeError(err))
     });
   }
 }

@@ -8,6 +8,7 @@ import { ClienteModel } from '../../shared/models/cliente-model';
 import { ClienteService } from '../../shared/services/cliente-service';
 import { FrmCliente } from '../forms/frm-cliente/frm-cliente';
 import { DialogoGeneral } from '../forms/dialogo-general/dialogo-general';
+import { mensajeDeError } from '../../shared/helpers/error-message';
 
 @Component({
   selector: 'app-cliente-component',
@@ -45,7 +46,10 @@ export class ClienteComponent implements OnInit {
     });
     ref.afterClosed().subscribe((ok) => {
       if (ok && cliente.id) {
-        this.clienteService.eliminar(cliente.id).subscribe({ next: () => this.cargarClientes() });
+        this.clienteService.eliminar(cliente.id).subscribe({
+          next: () => this.cargarClientes(),
+          error: (err) => alert(mensajeDeError(err))
+        });
       }
     });
   }

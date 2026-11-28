@@ -5,6 +5,9 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_password
       MYSQL_DATABASE: inventario_ventas
+      # Usuario de la app, con privilegios solo sobre inventario_ventas (no root).
+      MYSQL_USER: app_user
+      MYSQL_PASSWORD_FILE: /run/secrets/db_app_password
     ports:
       - 3310:3306
     volumes:
@@ -12,10 +15,11 @@ services:
       - ./mysql:/var/lib/mysql
     secrets:
       - db_password
+      - db_app_password
   webdatos:
-
     container_name: inventario_datos
-
+    environment:
+      DB_PASSWORD_FILE: /run/secrets/db_app_password
     volumes:
       - ./Data/public:/var/www/html/public
       - ./Data/src:/var/www/html/src
@@ -25,7 +29,7 @@ services:
     # Sin "ports": Datos solo se alcanza por la red interna de Docker
     # (http://webdatos/api), nunca directo desde fuera del contenedor.
     secrets:
-      - db_password
+      - db_app_password
     depends_on:
       - db
 
@@ -42,12 +46,17 @@ services:
     depends_on:
       - webdatos
 
-  #webpresentacion:
-   # container_name: web_presentacion
-    #build:
-     #dockerfile: Dockerfile
-    #ports:
-    #  - 4200:80
+  webpresentacion:
+    container_name: inventario_presentacion
+    build:
+      context: ./Presentation
+      dockerfile: Dockerfile
+    ports:
+      - 4200:80
+    depends_on:
+      - webnegocio
 secrets:
   db_password:
     file: ./db_password.txt
+  db_app_password:
+    file: ./db_app_password.txt

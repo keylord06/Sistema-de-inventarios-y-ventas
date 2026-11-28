@@ -1,9 +1,17 @@
 mysql/
 Data/vendor/
 Business/vendor/
+node_modules/
+Presentation/.angular/
+Presentation/dist/
+Presentation/android/app/build/
+Presentation/android/.gradle/
+Presentation/android/build/
+Presentation/android/capacitor-cordova-android-plugins/
 
 # Secretos (usar los .env.example como plantilla)
 Business/.env
 Data/.env
 db_password.txt
+db_app_password.txt
 .env.prod

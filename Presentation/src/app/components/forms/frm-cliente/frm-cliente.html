@@ -20,6 +20,9 @@
       <mat-label>Correo electrónico</mat-label>
       <input matInput type="email" formControlName="email">
     </mat-form-field>
+    @if (errorMsg()) {
+      <p style="color: #dc2626; font-size: 13px; margin: 0;">{{ errorMsg() }}</p>
+    }
   </form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">

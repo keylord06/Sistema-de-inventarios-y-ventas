@@ -8,6 +8,7 @@ import { ProveedorModel } from '../../shared/models/proveedor-model';
 import { ProveedorService } from '../../shared/services/proveedor-service';
 import { FrmProveedor } from '../forms/frm-proveedor/frm-proveedor';
 import { DialogoGeneral } from '../forms/dialogo-general/dialogo-general';
+import { mensajeDeError } from '../../shared/helpers/error-message';
 
 @Component({
   selector: 'app-proveedor-component',
@@ -45,7 +46,10 @@ export class ProveedorComponent implements OnInit {
     });
     ref.afterClosed().subscribe((ok) => {
       if (ok && proveedor.id) {
-        this.proveedorService.eliminar(proveedor.id).subscribe({ next: () => this.cargarProveedores() });
+        this.proveedorService.eliminar(proveedor.id).subscribe({
+          next: () => this.cargarProveedores(),
+          error: (err) => alert(mensajeDeError(err))
+        });
       }
     });
   }

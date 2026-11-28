@@ -8,6 +8,7 @@ import { ProductoModel } from '../../shared/models/product-model';
 import { ProductoService } from '../../shared/services/producto-service';
 import { FrmProducto } from '../forms/frm-producto/frm-producto';
 import { DialogoGeneral } from '../forms/dialogo-general/dialogo-general';
+import { mensajeDeError } from '../../shared/helpers/error-message';
 
 @Component({
   selector: 'app-producto-component',
@@ -62,7 +63,8 @@ export class ProductoComponent implements OnInit {
     ref.afterClosed().subscribe((confirmado) => {
       if (confirmado && producto.id) {
         this.productoService.eliminar(producto.id).subscribe({
-          next: () => this.cargarProductos()
+          next: () => this.cargarProductos(),
+          error: (err) => alert(mensajeDeError(err))
         });
       }
     });
